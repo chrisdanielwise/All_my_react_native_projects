@@ -12,7 +12,7 @@ Feel free to explore the projects and use them as learning resources, references
 
 The projects are organized based on complexity and concepts covered. Here's a brief overview of the directories:
 
-- **[Project 1: BeginnerApp](/BeginnerApp)** - A simple React Native app for beginners.
+- **[Project 1: FoodDeliveryApp](https://github.com/chrisdanielwise/All_my_react_native_projects/tree/master/food-delivery)** - A simple React Native app for beginners.
 - **[Project 2: IntermediateApp](/IntermediateApp)** - An intermediate-level React Native project.
 - **[Project 3: AdvancedApp](/AdvancedApp)** - An advanced React Native application showcasing complex features and patterns.
 
