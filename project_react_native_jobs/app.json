@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "jobsift",
+    "slug": "jobsift",
+    "extra": {
+      "eas": {
+        "projectId": "83c58a5a-a2fc-450c-8407-d2c81e6b7cc4"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/83c58a5a-a2fc-450c-8407-d2c81e6b7cc4"
+    },
+    "android": {},
+    "ios": {}
+  }
+}
