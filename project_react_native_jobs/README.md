@@ -13,7 +13,7 @@
   <h3 align="center">React Native Job Finder App</h3>
 
    <div align="center">
-     Build this project step by step with our detailed tutorial on <a href="https://www.youtube.com/@javascriptmastery/videos" target="_blank"><b>JavaScript Mastery</b></a> YouTube. Join the JSM family!
+     Build this project step by step using this as a guild 
     </div>
 </div>
 
@@ -27,21 +27,11 @@
 6. 🔗 [Links](#links)
 7. 🚀 [More](#more)
 
-## 🚨 Tutorial
-
-This repository contains the code corresponding to an in-depth tutorial available on our YouTube channel, <a href="https://www.youtube.com/@javascriptmastery/videos" target="_blank"><b>JavaScript Mastery</b></a>. 
-
-If you prefer visual learning, this is the perfect resource for you. Follow our tutorial to learn how to build projects like these step-by-step in a beginner-friendly manner!
-
-<a href="https://youtu.be/mJ3bGvy0WAY?feature=shared" target="_blank"><img src="https://github.com/sujatagunale/EasyRead/assets/151519281/1736fca5-a031-4854-8c09-bc110e3bc16d" /></a>
 
 ## <a name="introduction">🤖 Introduction</a>
 
 A hands-on experience in React Native development, from understanding the basics to building a feature-rich app with a focus on UI/UX, external data integration, and best practices.
 
-If you're getting started and need assistance or face any bugs, join our active Discord community with over 27k+ members. It's a place where people help each other out.
-
-<a href="https://discord.com/invite/n6EdbFJ" target="_blank"><img src="https://github.com/sujatagunale/EasyRead/assets/151519281/618f4872-1e10-42da-8213-1d69e486d02e" /></a>
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
@@ -90,7 +80,7 @@ Make sure you have the following installed on your machine:
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/adrianhajdin/project_react_native_jobs.git
+git clone https://github.com/chrisdanielwise/All_my_react_native_projects.git
 cd project_react_native_jobs
 ```
 
@@ -126,168 +116,153 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 <summary><code>Search.js</code></summary>
 
 ```javascript
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, FlatList, Image, TouchableOpacity, View } from 'react-native'
-import { Stack, useRouter, useSearchParams } from 'expo-router'
-import { Text, SafeAreaView } from 'react-native'
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Stack, useRouter, useLocalSearchParams } from "expo-router";
+import { Text, SafeAreaView } from "react-native";
+import axios from "axios";
 
-import { ScreenHeaderBtn, NearbyJobCard } from '../../components'
-import { COLORS, icons, SIZES } from '../../constants'
-import styles from '../../styles/search'
+import { ScreenHeaderBtn, NearbyJobCard } from "../../components";
+import { COLORS, icons, SIZES } from "../../constants";
+import styles from "../../styles/search";
 
 const JobSearch = () => {
-    const params = useSearchParams();
-    const router = useRouter()
+  const params = useLocalSearchParams();
+  const router = useRouter();
 
-    const [searchResult, setSearchResult] = useState([]);
-    const [searchLoader, setSearchLoader] = useState(false);
-    const [searchError, setSearchError] = useState(null);
-    const [page, setPage] = useState(1);
+  const [searchResult, setSearchResult] = useState([]);
+  const [searchLoader, setSearchLoader] = useState(false);
+  const [searchError, setSearchError] = useState(null);
+  const [page, setPage] = useState(1);
 
-    const handleSearch = async () => {
-        setSearchLoader(true);
-        setSearchResult([])
+  const handleSearch = async () => {
+    setSearchLoader(true);
+    setSearchResult([]);
 
-        try {
-            const options = {
-                method: "GET",
-                url: `https://jsearch.p.rapidapi.com/search`,
-                headers: {
-                    "X-RapidAPI-Key": '',
-                    "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
-                },
-                params: {
-                    query: params.id,
-                    page: page.toString(),
-                },
-            };
+    try {
+      const options = {
+        method: "GET",
+        url: `https://jsearch.p.rapidapi.com/search`,
+        headers: {
+          "X-RapidAPI-Key":
+            "KJwZZIJSFimshuivMSVGaiYzkRomp15f2vkjsnk4bkzuUzVLzA",
+          "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
+        },
+        params: {
+          query: params.id,
+          page: page.toString(),
+        },
+      };
 
-            const response = await axios.request(options);
-            setSearchResult(response.data.data);
-        } catch (error) {
-            setSearchError(error);
-            console.log(error);
-        } finally {
-            setSearchLoader(false);
-        }
-    };
-
-    const handlePagination = (direction) => {
-        if (direction === 'left' && page > 1) {
-            setPage(page - 1)
-            handleSearch()
-        } else if (direction === 'right') {
-            setPage(page + 1)
-            handleSearch()
-        }
+      const response = await axios.request(options);
+      const result = response.data.data;
+      setSearchResult(result);
+      // console.log(result,"result")
+    } catch (error) {
+      setSearchError(error);
+      console.log(error);
+    } finally {
+      setSearchLoader(false);
     }
+  };
 
-    useEffect(() => {
-        handleSearch()
-    }, [])
+  const handlePagination = (direction) => {
+    if (direction === "left" && page > 1) {
+      setPage(page - 1);
+      handleSearch();
+    } else if (direction === "right" && searchResult.length > 0) {
+      setPage(page + 1);
+      handleSearch();
+    }
+  };
 
-    return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-            <Stack.Screen
-                options={{
-                    headerStyle: { backgroundColor: COLORS.lightWhite },
-                    headerShadowVisible: false,
-                    headerLeft: () => (
-                        <ScreenHeaderBtn
-                            iconUrl={icons.left}
-                            dimension='60%'
-                            handlePress={() => router.back()}
-                        />
-                    ),
-                    headerTitle: "",
-                }}
+  useEffect(() => {
+    handleSearch();
+  }, []);
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+      <Stack.Screen
+        options={{
+          headerStyle: { backgroundColor: COLORS.lightWhite },
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <ScreenHeaderBtn
+              iconUrl={icons.left}
+              dimension="60%"
+              handlePress={() => router.back()}
             />
+          ),
+          headerTitle: "",
+        }}
+      />
 
-            <FlatList
-                data={searchResult}
-                renderItem={({ item }) => (
-                    <NearbyJobCard
-                        job={item}
-                        handleNavigate={() => router.push(`/job-details/${item.job_id}`)}
-                    />
-                )}
-                keyExtractor={(item) => item.job_id}
-                contentContainerStyle={{ padding: SIZES.medium, rowGap: SIZES.medium }}
-                ListHeaderComponent={() => (
-                    <>
-                        <View style={styles.container}>
-                            <Text style={styles.searchTitle}>{params.id}</Text>
-                            <Text style={styles.noOfSearchedJobs}>Job Opportunities</Text>
-                        </View>
-                        <View style={styles.loaderContainer}>
-                            {searchLoader ? (
-                                <ActivityIndicator size='large' color={COLORS.primary} />
-                            ) : searchError && (
-                                <Text>Oops something went wrong</Text>
-                            )}
-                        </View>
-                    </>
-                )}
-                ListFooterComponent={() => (
-                    <View style={styles.footerContainer}>
-                        <TouchableOpacity
-                            style={styles.paginationButton}
-                            onPress={() => handlePagination('left')}
-                        >
-                            <Image
-                                source={icons.chevronLeft}
-                                style={styles.paginationImage}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
-                        <View style={styles.paginationTextBox}>
-                            <Text style={styles.paginationText}>{page}</Text>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.paginationButton}
-                            onPress={() => handlePagination('right')}
-                        >
-                            <Image
-                                source={icons.chevronRight}
-                                style={styles.paginationImage}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
-                    </View>
-                )}
-            />
-        </SafeAreaView>
-    )
-}
+      <FlatList
+        data={searchResult}
+        renderItem={({ item }) => (
+          <NearbyJobCard
+            job={item}
+            handleNavigate={() => router.push(`/job-details/${item.job_id}`)}
+          />
+        )}
+        keyExtractor={(item) => item.job_id}
+        contentContainerStyle={{ padding: SIZES.medium, rowGap: SIZES.medium }}
+        ListHeaderComponent={() => (
+          <>
+            <View style={styles.container}>
+              <Text style={styles.searchTitle}>{params.id}</Text>
+              <Text style={styles.noOfSearchedJobs}>Job Opportunities</Text>
+            </View>
+            <View style={styles.loaderContainer}>
+              {searchLoader ? (
+                <ActivityIndicator size="large" color={COLORS.primary} />
+              ) : (
+                searchError && <Text>Oops something went wrong</Text>
+              )}
+            </View>
+          </>
+        )}
+        ListFooterComponent={() => (
+          <View style={styles.footerContainer}>
+            <TouchableOpacity
+              style={styles.paginationButton}
+              onPress={() => handlePagination("left")}
+            >
+              <Image
+                source={icons.chevronLeft}
+                style={styles.paginationImage}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <View style={styles.paginationTextBox}>
+              <Text style={styles.paginationText}>{page}</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.paginationButton}
+              onPress={() => handlePagination("right")}
+            >
+              <Image
+                source={icons.chevronRight}
+                style={styles.paginationImage}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+    </SafeAreaView>
+  );
+};
 
-export default JobSearch
+export default JobSearch;
+
 ```
 </details>
 
-## <a name="links">🔗 Links</a>
 
-Models and Assets used in the project can be found [here](https://drive.google.com/file/d/1VGr3R-3uta9xNj17eRHMxTELhtE2LaCm/view)
-
-## <a name="more">🚀 More</a>
-
-**Advance your skills with Next.js 14 Pro Course**
-
-Enjoyed creating this project? Dive deeper into our PRO courses for a richer learning adventure. They're packed with detailed explanations, cool features, and exercises to boost your skills. Give it a go!
-
-<a href="https://jsmastery.pro/next14" target="_blank">
-<img src="https://github.com/sujatagunale/EasyRead/assets/151519281/557837ce-f612-4530-ab24-189e75133c71" alt="Project Banner">
-</a>
-
-<br />
-<br />
-
-**Accelerate your professional journey with the Expert Training program**
-
-And if you're hungry for more than just a course and want to understand how we learn and tackle tech challenges, hop into our personalized masterclass. We cover best practices, different web skills, and offer mentorship to boost your confidence. Let's learn and grow together!
-
-<a href="https://www.jsmastery.pro/masterclass" target="_blank">
-<img src="https://github.com/sujatagunale/EasyRead/assets/151519281/fed352ad-f27b-400d-9b8f-c7fe628acb84" alt="Project Banner">
-</a>
-
-#
